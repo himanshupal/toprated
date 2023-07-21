@@ -1,15 +1,17 @@
+import type { IMovieCreditResponse } from "@/types/MovieCreditResponse";
 import type { IMovieInfoResponse } from "@/types/MovieInfoResponse";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ITopRatedPage } from "@/types/TopRatedResponse";
-import Slide from "./Slide";
 import { useDisplayDimensions } from "@/hooks";
+import Slide from "./Slide";
 
 interface ICarouselData {
   slides: ITopRatedPage[];
   movieData: IMovieInfoResponse[];
+  castData: IMovieCreditResponse[];
 }
 
-const Carousel: React.FC<ICarouselData> = ({ slides, movieData }) => {
+const Carousel: React.FC<ICarouselData> = ({ slides, movieData, castData }) => {
   const [slideCount, setSliceCount] = useState<number>(5);
   const [skip, setSkip] = useState<number>(0);
 
@@ -68,7 +70,7 @@ const Carousel: React.FC<ICarouselData> = ({ slides, movieData }) => {
 
       <div className="flex items-start justify-around gap-8 mx-10">
         {activeSlides.map((slide) => (
-          <Slide key={slide.id} {...slide} {...movieData.find(({ id }) => id === slide.id)!} />
+          <Slide key={slide.id} {...slide} {...movieData.find(({ id }) => id === slide.id)!} cast={...castData.find(({ id }) => id === slide.id)!.cast} />
         ))}
       </div>
 
