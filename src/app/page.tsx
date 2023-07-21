@@ -1,5 +1,5 @@
 import { fetchDataFromTMDB } from "@/utils";
-import HomeUI from "@/pages/Home";
+import HomeUI from "@/interface/Home";
 
 const Home = async () => {
   const data = await fetchDataFromTMDB();
