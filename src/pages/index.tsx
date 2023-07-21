@@ -1,0 +1,35 @@
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { ITopRatedResponse } from "@/types/TopRatedResponse";
+import favicon from "@/assets/image/favicon.ico";
+import Carousel from "@/components/Carousel";
+import { fetchDataFromTMDB } from "@/utils";
+import { Fragment } from "react";
+import Head from "next/head";
+
+export interface IHomeUIProps extends InferGetServerSidePropsType<typeof getServerSideProps> {
+  // ...
+}
+
+const HomeUI = ({ data }: IHomeUIProps) => {
+  return (
+    <Fragment>
+      <Head>
+        <title>Top Rated Movies</title>
+        <link rel="icon" href={favicon.src} type="image/x-icon" />
+        <meta name="description" content="App that shows top rated movies using TMDB API" />
+      </Head>
+
+      <div className="px-3 py-8">
+        <h1 className="font-bold text-2xl">Top Rated Movies</h1>
+        <Carousel slides={data.results} />
+      </div>
+    </Fragment>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps<{ data: ITopRatedResponse }> = async () => {
+  const data = await fetchDataFromTMDB();
+  return { props: { data } };
+};
+
+export default HomeUI;
