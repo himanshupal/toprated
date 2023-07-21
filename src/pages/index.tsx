@@ -1,4 +1,5 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { IMovieInfoResponse } from "@/types/MovieInfoResponse";
 import type { ITopRatedResponse } from "@/types/TopRatedResponse";
 import favicon from "@/assets/image/favicon.ico";
 import Carousel from "@/components/Carousel";
@@ -10,7 +11,7 @@ export interface IHomeUIProps extends InferGetServerSidePropsType<typeof getServ
   // ...
 }
 
-const HomeUI = ({ data }: IHomeUIProps) => {
+const HomeUI = ({ data, movieData }: IHomeUIProps) => {
   return (
     <Fragment>
       <Head>
@@ -21,15 +22,21 @@ const HomeUI = ({ data }: IHomeUIProps) => {
 
       <div className="px-3 py-8">
         <h1 className="font-bold text-2xl">Top Rated Movies</h1>
-        <Carousel slides={data.results} />
+        <Carousel slides={data.results} movieData={movieData} />
       </div>
     </Fragment>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<{ data: ITopRatedResponse }> = async () => {
+export const getServerSideProps: GetServerSideProps<{ data: ITopRatedResponse; movieData: IMovieInfoResponse[] }> = async () => {
   const data = await fetchDataFromTMDB();
-  return { props: { data } };
+  const movieData = await Promise.all(
+    data.results.map(async ({ id }) => {
+      const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_APP_TMDB_API_KEY}`);
+      return (await response.json()) as IMovieInfoResponse;
+    })
+  );
+  return { props: { data, movieData } };
 };
 
 export default HomeUI;

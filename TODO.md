@@ -12,8 +12,8 @@ Create a single-page application reminiscent of popular platforms like Netflix a
 - Show at least 5 movies at a time on a desktop viewport, reducing to 3 on tablet and 1 on mobile. Allow the user to scroll through to see more movies.
 - Implement arrows or buttons to facilitate carousel navigation.
 - When a movie's cover art is clicked, a modal should appear over the page (with a semi-transparent background to obscure the carousel). The modal should:
-- Display the movie's cover art, title, detailed description, release date, and a cast list.
-- Be equipped with a close button. Clicking this button or clicking outside the modal should close the modal.
+  - Display the movie's cover art, title, detailed description, release date, and a cast list.
+  - Be equipped with a close button. Clicking this button or clicking outside the modal should close the modal.
 - The modal should slide in from the bottom and slide out to the bottom when being closed.
 - You will need to integrate with the TMDB API to fetch the top-rated movie data. Leverage Next.js's server-side rendering feature, fetching the movie list on the server and having it ready to display when the page loads.
 

@@ -1,17 +1,32 @@
-import { useCallback, useMemo, useState } from "react";
-import Slide, { type ISlideData } from "./Slide";
+import type { IMovieInfoResponse } from "@/types/MovieInfoResponse";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ITopRatedPage } from "@/types/TopRatedResponse";
+import Slide from "./Slide";
+import { useDisplayDimensions } from "@/hooks";
 
 interface ICarouselData {
-  slides: ISlideData[];
+  slides: ITopRatedPage[];
+  movieData: IMovieInfoResponse[];
 }
 
-const AT_ONCE = 5;
-
-const Carousel: React.FC<ICarouselData> = ({ slides }) => {
+const Carousel: React.FC<ICarouselData> = ({ slides, movieData }) => {
+  const [slideCount, setSliceCount] = useState<number>(5);
   const [skip, setSkip] = useState<number>(0);
 
+  const dimension = useDisplayDimensions();
+
+  useEffect(() => {
+    if (dimension.width <= 768) {
+      setSliceCount(1);
+    } else if (dimension.width <= 1024) {
+      setSliceCount(3);
+    } else {
+      setSliceCount(5);
+    }
+  }, [dimension]);
+
   const activeSlides = useMemo(() => {
-    let end = skip + AT_ONCE - 1;
+    let end = skip + slideCount - 1;
     const indexes: number[] = [];
 
     if (end >= slides.length) {
@@ -23,7 +38,7 @@ const Carousel: React.FC<ICarouselData> = ({ slides }) => {
     }
 
     return indexes.map((i) => slides[i]);
-  }, [skip, slides]);
+  }, [skip, slides, slideCount]);
 
   const moveBack = useCallback(() => {
     setSkip((s) => {
@@ -46,14 +61,14 @@ const Carousel: React.FC<ICarouselData> = ({ slides }) => {
   }, [slides]);
 
   return (
-    <div className="w-full flex items-center justify-evenly mx-auto my-8" style={{ maxWidth: "90%" }}>
+    <div className="w-full flex items-center justify-evenly mx-auto my-8 lg:max-w-full">
       <button className="border border-white p-2 left-8" onClick={moveBack}>
         Left
       </button>
 
-      <div className="flex flex-wrap items-start justify-around gap-12 mx-10">
+      <div className="flex items-start justify-around gap-8 mx-10">
         {activeSlides.map((slide) => (
-          <Slide key={slide.id} {...slide} />
+          <Slide key={slide.id} {...slide} {...movieData.find(({ id }) => id === slide.id)!} />
         ))}
       </div>
 
