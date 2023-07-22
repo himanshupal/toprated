@@ -2,7 +2,10 @@ import type { IMovieCreditResponse } from "@/types/MovieCreditResponse";
 import type { IMovieInfoResponse } from "@/types/MovieInfoResponse";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ITopRatedPage } from "@/types/TopRatedResponse";
+import rightIcon from "@/assets/icons/right.svg";
 import { useDisplayDimensions } from "@/hooks";
+import leftIcon from "@/assets/icons/left.svg";
+import Image from "next/image";
 import Slide from "./Slide";
 
 interface ICarouselData {
@@ -68,36 +71,21 @@ const Carousel: React.FC<ICarouselData> = ({ slides, movieData, castData }) => {
     });
   }, [slides]);
 
-  const leftButton = (
-    <button className="border border-white p-2 left-8" onClick={moveBack}>
-      Left
-    </button>
-  );
-
-  const rightButton = (
-    <button className="border border-white p-2 right-8" onClick={moveNext}>
-      Right
-    </button>
-  );
-
   return (
-    <div className="w-full flex flex-col items-center justify-evenly mx-auto my-8 lg:max-w-full gap-8 xs:flex-row xs:gap-0">
-      {dimension.width > 535 && leftButton}
+    <div className="w-full flex items-center justify-evenly mx-auto my-8 gap-2">
+      <button className="border border-white rounded-full left-8 w-8 h-8 grid place-content-center hover:animate-pulse" onClick={moveBack}>
+        <Image src={leftIcon.src} alt="L" width={8} height={8} />
+      </button>
 
-      <div className="flex items-start justify-around gap-8 mx-10">
+      <div className="flex items-start justify-around gap-8">
         {activeSlides.map((slide) => (
           <Slide key={slide.id} {...slide} {...movieData.find(({ id }) => id === slide.id)!} cast={...castData.find(({ id }) => id === slide.id)!.cast} />
         ))}
       </div>
 
-      {dimension.width > 535 && rightButton}
-
-      {dimension.width <= 535 && (
-        <div className="flex items-center justify-evenly w-full">
-          {leftButton}
-          {rightButton}
-        </div>
-      )}
+      <button className="border border-white rounded-full right-8 w-8 h-8 grid place-content-center hover:animate-pulse" onClick={moveNext}>
+        <Image src={rightIcon} alt="R" width={8} height={8} />
+      </button>
     </div>
   );
 };

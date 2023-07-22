@@ -81,7 +81,7 @@ const Slide: React.FC<ISlideData> = ({ id, title, poster_path, original_title, v
               <div className="rounded-l-xl h-full xs:flex md:block">
                 <Image
                   priority
-                  className={"object-cover xs:h-auto xs:object-none md:h-full md:object-cover" + (dimensions.width < 535 ? " w-full" : "")}
+                  className={"object-cover xs:h-auto md:h-full" + (dimensions.width < 535 ? " w-full" : "")}
                   src={`https://image.tmdb.org/t/p/w500${poster_path}`}
                   alt={`Movie poster for ${title}`}
                   width={dimensions.width <= 768 ? 200 : 500}

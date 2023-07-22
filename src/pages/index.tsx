@@ -2,7 +2,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import type { IMovieCreditResponse } from "@/types/MovieCreditResponse";
 import type { IMovieInfoResponse } from "@/types/MovieInfoResponse";
 import type { ITopRatedResponse } from "@/types/TopRatedResponse";
-import favicon from "@/assets/image/favicon.ico";
+import favicon from "@/assets/icons/favicon.ico";
 import Carousel from "@/components/Carousel";
 import { fetchDataFromTMDB } from "@/utils";
 import { Fragment } from "react";
