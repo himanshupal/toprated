@@ -11,8 +11,8 @@ const useDisplayDimensions = () => {
 
   const updateDimens = useCallback(() => {
     setDimens({
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: window.outerWidth,
+      height: window.outerHeight,
     });
   }, []);
 

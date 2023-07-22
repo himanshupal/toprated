@@ -12,19 +12,25 @@ interface ICarouselData {
 }
 
 const Carousel: React.FC<ICarouselData> = ({ slides, movieData, castData }) => {
-  const [slideCount, setSliceCount] = useState<number>(5);
+  const [slideCount, setSlideCount] = useState<number>(0);
   const [skip, setSkip] = useState<number>(0);
 
   const dimension = useDisplayDimensions();
 
   useEffect(() => {
-    if (dimension.width <= 768) {
-      setSliceCount(1);
-    } else if (dimension.width <= 1024) {
-      setSliceCount(3);
-    } else {
-      setSliceCount(5);
+    if (dimension.width <= 850) {
+      return setSlideCount(1);
     }
+    if (dimension.width <= 1200) {
+      return setSlideCount(2);
+    }
+    if (dimension.width <= 1440) {
+      return setSlideCount(3);
+    }
+    if (dimension.width <= 1800) {
+      return setSlideCount(4);
+    }
+    return setSlideCount(5);
   }, [dimension]);
 
   const activeSlides = useMemo(() => {
@@ -62,11 +68,21 @@ const Carousel: React.FC<ICarouselData> = ({ slides, movieData, castData }) => {
     });
   }, [slides]);
 
+  const leftButton = (
+    <button className="border border-white p-2 left-8" onClick={moveBack}>
+      Left
+    </button>
+  );
+
+  const rightButton = (
+    <button className="border border-white p-2 right-8" onClick={moveNext}>
+      Right
+    </button>
+  );
+
   return (
-    <div className="w-full flex items-center justify-evenly mx-auto my-8 lg:max-w-full">
-      <button className="border border-white p-2 left-8" onClick={moveBack}>
-        Left
-      </button>
+    <div className="w-full flex flex-col items-center justify-evenly mx-auto my-8 lg:max-w-full gap-8 xs:flex-row xs:gap-0">
+      {dimension.width > 535 && leftButton}
 
       <div className="flex items-start justify-around gap-8 mx-10">
         {activeSlides.map((slide) => (
@@ -74,9 +90,14 @@ const Carousel: React.FC<ICarouselData> = ({ slides, movieData, castData }) => {
         ))}
       </div>
 
-      <button className="border border-white p-2 right-8" onClick={moveNext}>
-        Right
-      </button>
+      {dimension.width > 535 && rightButton}
+
+      {dimension.width <= 535 && (
+        <div className="flex items-center justify-evenly w-full">
+          {leftButton}
+          {rightButton}
+        </div>
+      )}
     </div>
   );
 };
